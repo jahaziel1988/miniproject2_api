@@ -1,8 +1,23 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const PORT = 4000;
+const bodyParser = require('body-parser');
+const registrationRouter = require('./routes/registration');
+const adminRoutes = require('./routes/admin');
+const usersRouter = require('./routes/users');
+require('dotenv').config();
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({ origin: '*' }));
 
-app.listen(3000)
+app.use('/register', registrationRouter);
+app.use('/admin', adminRoutes);
+app.use('/users', usersRouter);
+
+
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
