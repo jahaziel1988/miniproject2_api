@@ -2,22 +2,22 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../models/pool');
 
-// router.get('/check-unique', (req, res) => {
-//   const { username, email } = req.query;
-//   const checkUniqueQuery =
-//     'SELECT COUNT(*) as count_username, (SELECT COUNT(*) FROM tblAccInfo WHERE email = ?) as count_email FROM tblAccInfo WHERE username = ?';
+router.get('/check-unique', (req, res) => {
+  const { username, email } = req.query;
+  const checkUniqueQuery =
+    'SELECT COUNT(*) as count_username, (SELECT COUNT(*) FROM tblAccInfo WHERE email = ?) as count_email FROM tblAccInfo WHERE username = ?';
 
-//   pool.query(checkUniqueQuery, [email, username], (err, result) => {
-//     if (err) {
-//       console.error('Error checking unique username and email:', err);
-//       res.status(500).json({ error: 'An error occurred while checking unique username and email.' });
-//     } else {
-//       const isUniqueUsername = result[0].count_username === 0;
-//       const isUniqueEmail = result[0].count_email === 0;
-//       res.json({ isUniqueUsername, isUniqueEmail });
-//     }
-//   });
-// });
+  pool.query(checkUniqueQuery, [email, username], (err, result) => {
+    if (err) {
+      console.error('Error checking unique username and email:', err);
+      res.status(500).json({ error: 'An error occurred while checking unique username and email.' });
+    } else {
+      const isUniqueUsername = result[0].count_username === 0;
+      const isUniqueEmail = result[0].count_email === 0;
+      res.json({ isUniqueUsername, isUniqueEmail });
+    }
+  });
+});
 
 router.get('/', (req, res) => {
   const searchQuery = req.query.searchQuery || '';
