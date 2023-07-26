@@ -4,7 +4,6 @@ const pool = require('../models/pool');
 const sendEmail = require('../utils/email');
 
 
-
 router.post('/approve', (req, res) => {
   const { userID, email, username } = req.body;
 
@@ -12,9 +11,12 @@ router.post('/approve', (req, res) => {
     return res.status(400).json({ error: 'Invalid userID' });
   }
 
-  const transferQuery = `INSERT INTO tblmemberinfo (uID, full_name, birthdate, address, member_of_other_communities, hear_from_us, what_can_you_do, dream_community) 
-  SELECT uID, full_name, birthdate, address, member_of_other_communities, hear_from_us, what_can_you_do, dream_community 
-  FROM tblUserInfo WHERE uID = ?`;
+  const transferQuery = `
+    INSERT INTO tblmemberinfo (uID, username, full_name, birthdate, address, member_of_other_communities, hear_from_us, what_can_you_do, dream_community) 
+    SELECT acc.uID, acc.username, info.full_name, info.birthdate, info.address, info.member_of_other_communities, info.hear_from_us, info.what_can_you_do, info.dream_community 
+    FROM tblAccInfo AS acc
+    JOIN tblUserInfo AS info ON acc.uID = info.uID
+    WHERE acc.uID = ?`;
 
   pool.query(transferQuery, [userID], (err, transferResult) => {
     if (err) {
@@ -47,6 +49,8 @@ router.post('/approve', (req, res) => {
     }
   });
 });
+
+
 
 
 

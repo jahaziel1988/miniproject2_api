@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../models/pool');
+const multer = require('multer');
+const path = require('path');
 
 router.get('/check-unique', (req, res) => {
   const { username, email } = req.query;
@@ -65,6 +67,50 @@ router.post('/login', (req, res) => {
   });
 });
 
+
+// HIGHLIGHTS SPACE TO GUYS
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueFilename = file.originalname; 
+    cb(null, uniqueFilename);
+  },
+});
+
+const upload = multer({ storage });
+
+router.post('/highlights', upload.fields([{ name: 'playerCard', maxCount: 1 }, { name: 'videoHighlight', maxCount: 1 }]), (req, res) => {
+  const { uID, username } = req.body;
+  const playerCardURL = req.files['playerCard'][0].filename;
+  const videoHighlightURL = req.files['videoHighlight'][0].filename;
+
+  const insertHighlightQuery = 'INSERT INTO tblHighlights (uID, username, playerCard, videoHighlight) VALUES (?, ?, ?, ?)';
+  pool.query(insertHighlightQuery, [uID, username, playerCardURL, videoHighlightURL], (err, result) => {
+    if (err) {
+      console.error('Error inserting highlight:', err);
+      res.status(500).json({ error: 'An error occurred while adding the highlight.' });
+    } else {
+      res.json({ message: 'Highlight added successfully!' });
+    }
+  });
+});
+
+
+router.get('/highlights', (req, res) => {
+  const getHighlightsQuery = 'SELECT * FROM tblHighlights';
+
+  pool.query(getHighlightsQuery, (err, highlights) => {
+    if (err) {
+      console.error('Error fetching highlights:', err);
+      res.status(500).json({ error: 'An error occurred while fetching highlights.' });
+    } else {
+      res.json(highlights);
+    }
+  });
+});
 
 
 
