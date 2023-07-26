@@ -68,7 +68,7 @@ router.post('/login', (req, res) => {
 });
 
 
-// HIGHLIGHTS space TO GUYS
+// HIGHLIGHTS SPACE TO GUYS
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -79,9 +79,6 @@ const storage = multer.diskStorage({
     cb(null, uniqueFilename);
   },
 });
-
-
-
 
 const upload = multer({ storage });
 
@@ -114,6 +111,7 @@ router.get('/highlights', (req, res) => {
     }
   });
 });
+
 
 
 
