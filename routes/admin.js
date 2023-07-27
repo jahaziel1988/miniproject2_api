@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../models/pool');
-const sendEmail = require('../utils/email');
+// const sendEmail = require('../utils/email');
 
 router.post('/approve', (req, res) => {
   const { userID, email, username } = req.body;
@@ -32,17 +32,17 @@ router.post('/approve', (req, res) => {
         } else {
           console.log('User approval status updated');
 
-          const subject = 'Account Approved';
-          const message = `Hello ${username}, \n\nWe are happy to announce that your account has been approved. You can now use your registered username and password to log in to our community website.\n\nWelcome to the 2KLC community!\n\nBest regards,\n2KLC Community Team`;
+          // const subject = 'Account Approved';
+          // const message = `Hello ${username}, \n\nWe are happy to announce that your account has been approved. You can now use your registered username and password to log in to our community website.\n\nWelcome to the 2KLC community!\n\nBest regards,\n2KLC Community Team`;
 
-          sendEmail(email, subject, message)
-            .then(() => {
-              res.json({ message: 'User approved and email sent successfully!' });
-            })
-            .catch((error) => {
-              console.error('Error sending approval email:', error);
-              res.status(500).json({ error: 'An error occurred while sending approval email.' });
-            });
+          // sendEmail(email, subject, message)
+          //   .then(() => {
+          //     res.json({ message: 'User approved and email sent successfully!' });
+          //   })
+          //   .catch((error) => {
+          //     console.error('Error sending approval email:', error);
+          //     res.status(500).json({ error: 'An error occurred while sending approval email.' });
+          //   });
         }
       });
     }

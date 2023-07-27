@@ -5,7 +5,7 @@ const pool = mysql.createPool({
   port: 3306,
   user: 'root',
   password: '',
-  database: '2KLC_DATABASE',
+  database: 'nba_2klc',
 });
 
 console.log('Pool created successfully.');
