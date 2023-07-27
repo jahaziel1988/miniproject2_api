@@ -37,10 +37,8 @@ router.get('/', (req, res) => {
   });
 });
 
-
 const adminUsername = 'admin';
 const adminPassword = 'admin123';
-
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -66,7 +64,6 @@ router.post('/login', (req, res) => {
     }
   });
 });
-
 
 // HIGHLIGHTS SPACE TO GUYS
 
@@ -98,7 +95,6 @@ router.post('/highlights', upload.fields([{ name: 'playerCard', maxCount: 1 }, {
   });
 });
 
-
 router.get('/highlights', (req, res) => {
   const getHighlightsQuery = 'SELECT * FROM tblHighlights';
 
@@ -112,7 +108,18 @@ router.get('/highlights', (req, res) => {
   });
 });
 
-
-
+//Search username for displaying highlights
+router.get('/search', (req, res) => {
+  const username = req.query.username;
+  const searchUserHighlights = `SELECT * FROM tblHighlights WHERE username = '${username}'`;
+  
+  pool.query(searchUserHighlights, (err, result) => {
+      if (err) {
+        throw err;
+      }
+      res.json(result);
+      console.log(result);
+    });
+  });
 
 module.exports = router;
