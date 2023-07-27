@@ -3,7 +3,6 @@ const router = express.Router();
 const pool = require('../models/pool');
 const sendEmail = require('../utils/email');
 
-
 router.post('/approve', (req, res) => {
   const { userID, email, username } = req.body;
 
@@ -50,8 +49,18 @@ router.post('/approve', (req, res) => {
   });
 });
 
-
-
-
+//Search username for Approval
+router.get('/search', (req, res) => {
+  const username = req.query.username;
+    const sql = `SELECT * FROM tblAccInfo JOIN tblUserInfo ON tblAccInfo.uID = tblUserInfo.uID WHERE username = '${username}' AND is_approved = false`;
+  
+    pool.query(sql, (err, result) => {
+      if (err) {
+        throw err;
+      }
+      res.json(result);
+      console.log(result);
+    });
+  });
 
 module.exports = router;
